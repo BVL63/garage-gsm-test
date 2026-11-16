@@ -755,7 +755,7 @@ main{min-height:0;min-width:0}
 </details><div class="grid"><div><label>Подразделение</label><select id="deptFilter" onchange="render()"></select></div><div><label>Месяц</label><input type="month" id="monthFilter" onchange="render()"></div></div><div class="grid" id="stats"></div><div class="scroll"><table><thead><tr><th>Дата</th><th>Подразделение</th><th>Автомобиль</th><th>Водитель</th><th>Год / № листа</th><th>Пробег, км</th><th>Заправлено, л</th><th>Норма</th><th>Расход, л</th><th>Статус</th><th>Фото</th><th>Действие</th></tr></thead><tbody id="rows"></tbody></table></div><button onclick="exportCsv()">Экспорт CSV для Excel</button><button class="secondary" onclick="exportJson()">Резервная копия JSON (без фотографий)</button><label>Восстановить резервную копию JSON <input type="file" accept="application/json,.json" onchange="importJson(event)"></label></section><section id="managerDetail" class="panel hidden"><div class="journal-head"><h2>Путевой лист</h2><button type="button" class="secondary" onclick="tab('manager')">← Журнал</button></div><div id="managerSheetDetails"></div></section><section id="entryEdit" class="panel hidden compact-waybill-edit unified-waybill-card" aria-label="Путевой лист">
 <div class="uw-header"><h2 id="unifiedWaybillTitle">Путевой лист №</h2><div class="uw-header-value"><span class="uw-read" id="uwViewNumber">—</span><input class="uw-edit hidden" type="number" id="uwNumberInput" min="1" inputmode="numeric" placeholder="Номер" oninput="updateUnifiedSheetNumber(this.value)" aria-label="Номер путевого листа"><button type="button" class="uw-dismiss" onclick="cancelEntryEdit()" aria-label="Закрыть карточку">×</button></div></div>
 <div class="uw-fields">
-<div class="uw-row"><div class="uw-label">Дата</div><div class="uw-value"><span class="uw-read" id="uwViewDate">—</span><input class="uw-edit hidden" id="editDateDisplay" type="text" inputmode="numeric" placeholder="дд.мм.гг" maxlength="10" onblur="syncEditDate()"><input id="editDate" type="hidden"></div></div>
+<div class="uw-row"><div class="uw-label">Дата</div><div class="uw-value"><span class="uw-read" id="uwViewDate">—</span><input class="uw-edit hidden" id="editDateDisplay" type="text" inputmode="none" readonly placeholder="дд.мм.гг" onclick="openWaybillDatePicker()" aria-label="Выбрать дату в календаре"><input id="uwNativeDatePicker" type="date" aria-label="Календарь путевого листа" onchange="applyWaybillDatePicker(this.value)" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none"><input id="editDate" type="hidden"></div></div>
 <div class="uw-row"><div class="uw-label">Автомобиль</div><div class="uw-value"><span class="uw-read" id="uwViewCar">—</span><select class="uw-edit hidden" id="unifiedCar" onchange="refreshUnifiedNew()"></select></div></div>
 <div class="uw-row"><div class="uw-label">Водитель</div><div class="uw-value"><span class="uw-read" id="uwViewDriver">—</span><select class="uw-edit hidden" id="unifiedDriver"></select></div></div>
 <div class="uw-row"><div class="uw-label">Одометр, выезд, км</div><div class="uw-value"><span class="uw-read" id="uwViewOdoStart">—</span></div></div>
@@ -2871,6 +2871,18 @@ function entryEditNumbers(e){
  return {end,km,fuel,used,ending,valid};
 }
 function editDateToDisplay(iso){if(!/^\d{4}-\d{2}-\d{2}$/.test(iso||''))return '';const [y,m,d]=iso.split('-');return d+'.'+m+'.'+y.slice(2)}
+function openWaybillDatePicker(){
+ const picker=$('uwNativeDatePicker'),iso=$('editDate').value;
+ if(!picker||unifiedMode==='view')return;
+ picker.value=/^\d{4}-\d{2}-\d{2}$/.test(iso)?iso:today();
+ try{picker.showPicker()}catch(e){picker.focus();picker.click()}
+}
+function applyWaybillDatePicker(value){
+ if(!value)return;
+ $('editDate').value=value;
+ $('editDateDisplay').value=editDateToDisplay(value);
+ previewEntryEdit();
+}
 function syncEditDate(){
  const value=$('editDateDisplay').value.trim(),m=value.match(/^(\d{1,2})\.(\d{1,2})\.(\d{2}|\d{4})$/);
  if(!m){$('editDate').value='';previewEntryEdit();return false}

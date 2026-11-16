@@ -566,27 +566,27 @@ main{min-height:0;min-width:0}
 }
 </style>
 <style id="uw-iphone-visible-number-v027">
-/* Keep the waybill title/number visible below the fixed app header on iPhone. */
 @media(max-width:700px){
  #entryEdit.unified-waybill-card{
-  top:190px!important;bottom:0!important;
-  inset:190px 0 0 0!important;
-  left:0!important;right:0!important;
+  position:fixed!important;
+  inset:calc(env(safe-area-inset-top,0px) + 12px) 4vw auto 4vw!important;
+  top:calc(env(safe-area-inset-top,0px) + 12px)!important;
+  left:4vw!important;right:4vw!important;bottom:auto!important;
   transform:none!important;
-  width:100%!important;max-width:100%!important;
-  height:calc(100dvh - 190px)!important;
-  max-height:calc(100dvh - 190px)!important;
-  overflow-y:auto!important;
-  padding-bottom:100px!important;
-  scroll-padding-top:100px!important;
+  width:92vw!important;max-width:92vw!important;
+  height:auto!important;max-height:calc(100dvh - 24px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;
+  overflow-y:auto!important;overscroll-behavior:contain;
+  padding:16px 17px 20px!important;
+  margin:0!important;border-radius:22px!important;
+  z-index:4000!important;scroll-padding-top:75px!important;
  }
- #entryEdit.unified-waybill-card .uw-header{
-  position:sticky!important;top:-18px!important;
-  z-index:15!important;background:#edf2f9!important;
-  padding:12px 0!important;margin-bottom:8px!important;
- }
- #entryEdit.unified-waybill-card #uwNumberInput{min-width:0!important;max-width:100%!important;scroll-margin-top:100px!important}
- #entryEdit.unified-waybill-card .uw-save-actions{padding-bottom:28px!important}
+ #entryEdit.unified-waybill-card .uw-header{position:sticky!important;top:-16px!important;z-index:5!important;background:#edf2f9!important;padding:7px 0!important}
+ #entryEdit.unified-waybill-card .uw-row{min-height:42px!important}
+ #entryEdit.unified-waybill-card .uw-row input,#entryEdit.unified-waybill-card .uw-row select{min-height:36px!important;height:36px!important;padding:3px 7px!important}
+ #entryEdit.unified-waybill-card #uwNumberInput{min-width:0!important;max-width:100%!important}
+ #entryEdit.unified-waybill-card .uw-save-actions{display:flex!important;gap:6px!important;flex-wrap:wrap!important;padding-bottom:6px!important}
+ #entryEdit.unified-waybill-card .uw-save-actions.hidden{display:none!important}
+ #entryEdit.unified-waybill-card .uw-save-actions button{flex:1 1 auto!important;font-size:14px!important;min-height:40px!important;padding:7px 8px!important}
 }
 </style>
 </head><body><div id="updateNotice" class="update-notice hidden" role="status" aria-live="polite" onclick="this.classList.add('hidden')" title="Нажмите, чтобы закрыть"></div><div id="offlineFlag" class="offline-flag hidden" role="status">Нет интернета. Журнал сохраняется на этом телефоне; при первой возможности сделайте резервную копию.</div><header><div class="app-topline"><h1>АЛЛО ГАРАЖ</h1><span id="interfaceMode" class="interface-mode" aria-label="Режим интерфейса">Телефон</span><span class="app-exit-button test-environment-label" aria-label="Тестовая версия">ТЕСТ</span></div><nav class="main-nav" aria-label="Главное меню">

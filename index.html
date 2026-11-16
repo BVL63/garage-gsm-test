@@ -1004,58 +1004,7 @@ function printCarsDirectory(){
  const headers=['Госномер','Модель','Подразделение','Начальный одометр, км','Начальный остаток, л'];
  const data=visibleCarsDirectory().map(c=>[c.plate,c.model||'—',db.departments.find(d=>d.id===c.dept)?.name||'—',fmtOdo(c.initialOdo),c.initialFuel==null?'—':Number(c.initialFuel).toFixed(4)]);
  const w=window.open('','_blank');if(!w)return alert('Разрешите всплывающие окна для печати.');
- const html='<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Автомобили · АЛЛО ГАРАЖ</title><style>body{font:14px Arial,sans-serif;margin:22px;color:#182334}table{border-collapse:collapse;width:100%}th,td{border:1px solid #b8c6d4;padding:8px;text-align:left}th{background:#eaf0f6}.close{float:right}@media print{.close{display:none}body{margin:0}}</style></head><body><button class="close" onclick="window.close()">× Закрыть</button><h2>Автомобили</h2><table><thead><tr>'+headers.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(v=>'<td>'+esc(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table><script id="uw-compact-input-v028">
-(function(){
- let active=null,allowDecimal=false;
- function el(id){return document.getElementById(id)}
- function hide(){el('uwMiniPad')?.classList.add('hidden');active=null}
- function show(input,decimal){
-  active=input;allowDecimal=decimal;
-  const pad=el('uwMiniPad');if(!pad)return;
-  pad.classList.remove('hidden');pad.querySelector('[data-key="."]').disabled=!decimal;
- }
- function setup(){
-  if(el('uwMiniPad'))return;
-  const pad=document.createElement('div');pad.id='uwMiniPad';pad.className='hidden';
-  pad.innerHTML='<div class="uw-pad-grid">'+['1','2','3','4','5','6','7','8','9','.','0','⌫','Готово'].map(k=>'<button type="button" data-key="'+k+'"'+(k==='Готово'?' class="uw-pad-done"':'')+'>'+k+'</button>').join('')+'</div>';
-  document.body.appendChild(pad);
-  pad.addEventListener('click',function(e){
-   const btn=e.target.closest('button');if(!btn||!active)return;
-   const k=btn.dataset.key;
-   if(k==='Готово'){hide();return}
-   let v=active.value||'';
-   if(k==='⌫')v=v.slice(0,-1);
-   else if(k==='.') {if(!allowDecimal||v.includes('.'))return;v=v?v+'.':'0.'}
-   else v+=k;
-   active.value=v;active.dispatchEvent(new Event('input',{bubbles:true}));active.dispatchEvent(new Event('change',{bubbles:true}));
-  });
-  ['uwNumberInput','editRefuel','editOdometer','editKm'].forEach(id=>{
-   const input=el(id);if(!input)return;
-   input.setAttribute('readonly','readonly');
-   input.addEventListener('click',()=>show(input,id==='editRefuel'));
-   input.addEventListener('focus',()=>show(input,id==='editRefuel'));
-  });
-  const date=el('editDateDisplay');
-  if(date){
-   date.readOnly=true;
-   date.addEventListener('click',function(){
-    hide();
-    const picker=document.createElement('input');picker.type='date';picker.style.cssText='position:fixed;left:50%;top:40%;opacity:0;z-index:99999';
-    picker.value=el('editDate')?.value||'';
-    document.body.appendChild(picker);
-    picker.addEventListener('change',function(){
-     if(picker.value){el('editDate').value=picker.value;date.value=picker.value.split('-').reverse().join('.');date.dispatchEvent(new Event('change',{bubbles:true}))}
-     picker.remove();
-    });
-    picker.addEventListener('blur',()=>setTimeout(()=>picker.remove(),300));
-    try{picker.showPicker()}catch(e){picker.focus();picker.click()}
-   });
-  }
-  document.addEventListener('click',function(e){if(!e.target.closest('#uwMiniPad')&&!e.target.closest('#entryEdit .uw-edit'))hide()});
- }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
-})();
-</script></body></html>';
+ const html='<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Автомобили · АЛЛО ГАРАЖ</title><style>body{font:14px Arial,sans-serif;margin:22px;color:#182334}table{border-collapse:collapse;width:100%}th,td{border:1px solid #b8c6d4;padding:8px;text-align:left}th{background:#eaf0f6}.close{float:right}@media print{.close{display:none}body{margin:0}}</style></head><body><button class="close" onclick="window.close()">× Закрыть</button><h2>Автомобили</h2><table><thead><tr>'+headers.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(v=>'<td>'+esc(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table></body></html>';
  w.document.open();w.document.write(html);w.document.close();w.addEventListener('load',()=>{w.focus();w.print()},{once:true});
 }
 
@@ -3005,4 +2954,56 @@ function applyWaybillInputMode(){
  });
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyWaybillInputMode);else applyWaybillInputMode();
-</script></body></html>
+</script><script id="uw-compact-input-v028">
+(function(){
+ let active=null,allowDecimal=false;
+ function el(id){return document.getElementById(id)}
+ function hide(){el('uwMiniPad')?.classList.add('hidden');active=null}
+ function show(input,decimal){
+  active=input;allowDecimal=decimal;
+  const pad=el('uwMiniPad');if(!pad)return;
+  pad.classList.remove('hidden');pad.querySelector('[data-key="."]').disabled=!decimal;
+ }
+ function setup(){
+  if(el('uwMiniPad'))return;
+  const pad=document.createElement('div');pad.id='uwMiniPad';pad.className='hidden';
+  pad.innerHTML='<div class="uw-pad-grid">'+['1','2','3','4','5','6','7','8','9','.','0','⌫','Готово'].map(k=>'<button type="button" data-key="'+k+'"'+(k==='Готово'?' class="uw-pad-done"':'')+'>'+k+'</button>').join('')+'</div>';
+  document.body.appendChild(pad);
+  pad.addEventListener('click',function(e){
+   const btn=e.target.closest('button');if(!btn||!active)return;
+   const k=btn.dataset.key;
+   if(k==='Готово'){hide();return}
+   let v=active.value||'';
+   if(k==='⌫')v=v.slice(0,-1);
+   else if(k==='.') {if(!allowDecimal||v.includes('.'))return;v=v?v+'.':'0.'}
+   else v+=k;
+   active.value=v;active.dispatchEvent(new Event('input',{bubbles:true}));active.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  ['uwNumberInput','editRefuel','editOdometer','editKm'].forEach(id=>{
+   const input=el(id);if(!input)return;
+   input.setAttribute('readonly','readonly');
+   input.addEventListener('click',()=>show(input,id==='editRefuel'));
+   input.addEventListener('focus',()=>show(input,id==='editRefuel'));
+  });
+  const date=el('editDateDisplay');
+  if(date){
+   date.readOnly=true;
+   date.addEventListener('click',function(){
+    hide();
+    const picker=document.createElement('input');picker.type='date';picker.style.cssText='position:fixed;left:50%;top:40%;opacity:0;z-index:99999';
+    picker.value=el('editDate')?.value||'';
+    document.body.appendChild(picker);
+    picker.addEventListener('change',function(){
+     if(picker.value){el('editDate').value=picker.value;date.value=picker.value.split('-').reverse().join('.');date.dispatchEvent(new Event('change',{bubbles:true}))}
+     picker.remove();
+    });
+    picker.addEventListener('blur',()=>setTimeout(()=>picker.remove(),300));
+    try{picker.showPicker()}catch(e){picker.focus();picker.click()}
+   });
+  }
+  document.addEventListener('click',function(e){if(!e.target.closest('#uwMiniPad')&&!e.target.closest('#entryEdit .uw-edit'))hide()});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
+})();
+</script>
+</body></html>

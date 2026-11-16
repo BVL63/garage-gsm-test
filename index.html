@@ -2951,4 +2951,7 @@ function applyWaybillInputMode(){
  });
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyWaybillInputMode);else applyWaybillInputMode();
+// Put the waybill overlay directly under body: fixed positioning inside main is clipped/stacked below the app header on iOS.
+function mountUnifiedWaybillOverlay(){const card=document.getElementById('entryEdit');if(card&&card.parentElement!==document.body)document.body.appendChild(card)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountUnifiedWaybillOverlay);else mountUnifiedWaybillOverlay();
 </script></body></html>
